@@ -1,0 +1,28 @@
+# Swift Package Manager
+.build/
+.swiftpm/
+Package.resolved
+
+# Build output (app bundle, iconset)
+build/
+
+# Local dry-run state (make run-dry)
+.dev/
+
+# Xcode
+xcuserdata/
+DerivedData/
+*.xcodeproj/
+*.xcworkspace/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
