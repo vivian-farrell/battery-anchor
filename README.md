@@ -1,12 +1,18 @@
 # Battery Anchor
 
+[![CI](https://github.com/vivian-farrell/battery-anchor/actions/workflows/ci.yml/badge.svg)](https://github.com/vivian-farrell/battery-anchor/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/vivian-farrell/battery-anchor/actions/workflows/codeql.yml/badge.svg)](https://github.com/vivian-farrell/battery-anchor/actions/workflows/codeql.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Safety & review](https://img.shields.io/badge/safety-review%20log-informational.svg)](SECURITY.md)
+
 Holds an Apple Silicon MacBook's battery at a maximum charge level. It runs the Mac from the charger instead of
 topping the battery up.
 
 > **Use at your own risk.** Battery Anchor runs a root daemon that changes how your Mac charges by writing to
 > undocumented SMC keys. It's for Apple Silicon MacBooks only and isn't affiliated with or endorsed by Apple, and a
 > macOS or firmware update could change how those keys behave. See [Failing safe](#failing-safe) and
-> [Limitations](#limitations), and run `make uninstall` if anything looks wrong.
+> [Limitations](#limitations), and run `make uninstall` if anything looks wrong. [SECURITY.md](SECURITY.md) lists
+> exactly what it changes on your Mac, how it has been reviewed and tested, and how to report a problem.
 
 - **On:** charges to the maximum (default 80%), then stops charging. The Mac runs from the charger, and the battery
   neither charges nor drains. Small drifts below the max (80 → 79 → 78) never trigger a top-up. Charging starts again

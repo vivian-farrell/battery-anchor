@@ -24,7 +24,9 @@ APP_DEST="/Applications/Battery Anchor.app"
 CONFLICTS="$(pgrep -fl 'AlDente|aldente-pro.helper|co.palokaj.battery|batt/batt' || true)"
 if [[ -n "$CONFLICTS" ]]; then
     echo "warning: other charge-control tools are running and will override Battery Anchor:" >&2
-    echo "$CONFLICTS" | sed 's/^/    /' >&2
+    while IFS= read -r line; do
+        echo "    $line" >&2
+    done <<< "$CONFLICTS"
     echo "  Quit/uninstall them (e.g. 'battery uninstall', AlDente → Settings → Uninstall helper)." >&2
     echo >&2
 fi
