@@ -13,6 +13,7 @@ usage: battery-anchor <command>
   buffer POINTS        Start charging again once the battery is POINTS below the max (default \(AnchorConfig.defaultRechargeBuffer))
   sleep-pause on|off   While asleep, stop charging just below the max (finishes on wake)
   smc                  Show charge-control SMC keys (diagnostics)
+  version              Show the version
 """
 
 func fail(_ message: String) -> Never {
@@ -147,6 +148,9 @@ case "smc":
     } catch {
         fail("\(error)")
     }
+
+case "version", "--version":
+    print("battery-anchor \(AnchorVersion.marketing)")
 
 case "help", "-h", "--help":
     print(usage)

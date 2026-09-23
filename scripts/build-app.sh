@@ -6,13 +6,21 @@ cd "$(dirname "$0")/.."
 swift build -c release
 BIN="$(swift build -c release --show-bin-path)"
 
+# Version comes from AnchorVersion; build number and commit identify the exact source.
+VERSION="$(grep -oE 'marketing = "[^"]+"' Sources/AnchorCore/Version.swift | cut -d'"' -f2)"
+BUILD="$(git rev-list --count HEAD 2>/dev/null || echo 0)"
+COMMIT="$(git rev-parse --short HEAD 2>/dev/null || echo unknown)"
+if ! git diff --quiet HEAD 2>/dev/null; then
+    COMMIT="$COMMIT+"  # uncommitted changes
+fi
+
 APP="build/Battery Anchor.app"
 rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/BatteryAnchorBar" "$APP/Contents/MacOS/BatteryAnchor"
 cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 
-cat > "$APP/Contents/Info.plist" <<'PLIST'
+cat > "$APP/Contents/Info.plist" <<PLIST
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
@@ -23,8 +31,9 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
     <key>CFBundleName</key><string>Battery Anchor</string>
     <key>CFBundleDisplayName</key><string>Battery Anchor</string>
     <key>CFBundlePackageType</key><string>APPL</string>
-    <key>CFBundleShortVersionString</key><string>1.0</string>
-    <key>CFBundleVersion</key><string>1</string>
+    <key>CFBundleShortVersionString</key><string>$VERSION</string>
+    <key>CFBundleVersion</key><string>$BUILD</string>
+    <key>BAGitCommit</key><string>$COMMIT</string>
     <key>LSMinimumSystemVersion</key><string>13.0</string>
     <key>LSUIElement</key><true/>
     <key>NSHumanReadableCopyright</key><string>Battery Anchor charge limiter</string>
@@ -33,4 +42,4 @@ cat > "$APP/Contents/Info.plist" <<'PLIST'
 PLIST
 
 codesign --force --sign - "$APP" >/dev/null
-echo "Built $APP"
+echo "Built $APP ($VERSION build $BUILD, $COMMIT)"

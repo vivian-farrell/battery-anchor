@@ -65,6 +65,8 @@ battery-anchor max 70           # change the max
 battery-anchor buffer 10        # charge again once 10 points below the max
 battery-anchor sleep-pause on|off
 battery-anchor smc              # show the SMC keys in use
+battery-anchor version          # version (the app shows version, build and commit
+                                #   when you hover its title in the menu bar panel)
 battery-anchor status --json
 ```
 

@@ -9,8 +9,21 @@ struct AnchorPanel: View {
     }
 
     enum Hint: Hashable {
-        case battery, power, max, buffer, sleep, login
+        case title, battery, power, max, buffer, sleep, login
     }
+
+    /// From the app bundle, so a build can be traced back to the exact source it came from.
+    static let versionSummary: String = {
+        let info = Bundle.main.infoDictionary
+        let version = info?["CFBundleShortVersionString"] as? String ?? AnchorVersion.marketing
+        guard let build = info?["CFBundleVersion"] as? String else {
+            return "Version \(version) (development build)"
+        }
+        guard let commit = info?["BAGitCommit"] as? String else {
+            return "Version \(version) (build \(build))"
+        }
+        return "Version \(version) · build \(build) · \(commit)"
+    }()
 
     @EnvironmentObject private var model: AnchorModel
 
@@ -64,7 +77,9 @@ struct AnchorPanel: View {
 
     private var header: some View {
         HStack {
-            Text("Battery Anchor").font(.headline)
+            Text("Battery Anchor")
+                .font(.headline)
+                .hint(.title, hintText(.title), $hovered)
             Spacer()
             Text(model.battery.map { "\($0.percent)%" } ?? "—")
                 .font(.headline)
@@ -171,6 +186,8 @@ struct AnchorPanel: View {
 
     private func hintText(_ hint: Hint) -> String {
         switch hint {
+        case .title:
+            return Self.versionSummary
         case .battery:
             guard let battery = model.battery else { return "No battery found" }
             return battery.healthSummary.isEmpty ? "Current battery level" : battery.healthSummary
