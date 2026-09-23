@@ -106,6 +106,12 @@ security audit and can miss things; the second review found issues the first did
   - Writes weren't verified. **Fixed:** read back after writing.
   - The config watcher wasn't re-armed. **Fixed.**
 
+### Fixes found in use
+
+| Date | Issue | Fix |
+| --- | --- | --- |
+| 2026-09-23 | With "Pause charging during sleep" on, an overnight charge stopped at the recharge level instead of near the maximum (reported at 61% with a 70% maximum and a 10-point buffer). | The sleep pause now follows the maximum, stopping 2 points below it and finishing on wake, so the buffer no longer affects sleep charging. |
+
 ## Reporting a problem
 
 - **Security issues:** please report privately via

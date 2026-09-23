@@ -11,7 +11,7 @@ usage: battery-anchor <command>
   off                  Charge normally
   max PERCENT          Set the maximum charge (\(AnchorConfig.maxChargeRange.lowerBound)–\(AnchorConfig.maxChargeRange.upperBound))
   buffer POINTS        Start charging again once the battery is POINTS below the max (default \(AnchorConfig.defaultRechargeBuffer))
-  sleep-pause on|off   Pause charging during sleep once within the hold window
+  sleep-pause on|off   While asleep, stop charging just below the max (finishes on wake)
   smc                  Show charge-control SMC keys (diagnostics)
 """
 

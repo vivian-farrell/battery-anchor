@@ -11,7 +11,8 @@ public struct AnchorConfig: Codable, Equatable, Sendable {
     public var maxCharge = 80
     /// Charging resumes once the battery is this many points below `maxCharge`.
     public var rechargeBuffer = AnchorConfig.defaultRechargeBuffer
-    /// Stop charging before sleep once within the hold window, so sleep can't overshoot `maxCharge`.
+    /// While asleep, stop charging just below `maxCharge` (see `Policy.sleepPauseMargin`) and finish on wake,
+    /// so an unattended sleep can't carry the battery well past the maximum.
     public var pauseChargingDuringSleep = true
 
     /// The level at or below which charging starts again.

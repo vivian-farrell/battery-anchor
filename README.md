@@ -24,7 +24,7 @@ topping the battery up.
 - **Max at or near the current level:** if the battery is already within the window (between the recharge level and the max), it holds immediately.
 - **Off:** macOS charges normally. Battery Anchor restores normal charging once, then leaves the charge settings
   alone, so macOS features such as Optimized Battery Charging keep working.
-- **Pause charging during sleep (on by default):** if charging is under way and the battery is already within the window when the Mac sleeps, charging stops, so a closed lid can't carry it past the max. Below the window it keeps charging, and can overshoot until the next wake.
+- **Pause charging during sleep (on by default):** while the Mac is asleep, charging stops 2 points below the max and finishes when you wake it, so a closed lid can't carry it well past the max. Macs that wake briefly for network access (Power Nap, "wake for network access") usually reach the max mid-sleep anyway. One that sleeps straight through for hours can overshoot; it runs back down to the max on the next wake.
 
 ## Install
 

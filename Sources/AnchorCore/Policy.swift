@@ -22,6 +22,9 @@ public enum Policy {
     /// Once the maximum has been reached, discharging only restarts above max + this, so a gauge
     /// bouncing between max and max+1 doesn't flip the adapter on and off.
     public static let dischargeHysteresis = 1
+    /// While asleep, charging stops this far below the maximum and finishes on wake. It follows the
+    /// maximum rather than the recharge level, so a wide buffer doesn't end an overnight charge early.
+    public static let sleepPauseMargin = 2
 
     public static func decide(
         config: AnchorConfig,
@@ -57,9 +60,10 @@ public enum Policy {
 
         switch phase {
         case .charging:
-            // Nothing can stop a charge until the Mac wakes. Within the hold window, pausing avoids
-            // overshooting; below it, getting charge in matters more.
-            if asleep, config.pauseChargingDuringSleep, percent >= rechargeLevel {
+            // Nothing can stop a charge until the Mac wakes, so stop just short of the maximum and
+            // finish on wake. Macs that wake briefly for network access reach the maximum mid-sleep;
+            // one that sleeps straight through can overshoot, and is brought back down on waking.
+            if asleep, config.pauseChargingDuringSleep, percent >= maxCharge - sleepPauseMargin {
                 return ChargeDecision(allowCharging: false, forceDischarge: false, phase: phase, reason: "Charging paused while asleep")
             }
             return ChargeDecision(allowCharging: true, forceDischarge: false, phase: phase, reason: "Charging to \(maxCharge)%")

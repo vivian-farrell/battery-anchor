@@ -96,10 +96,21 @@ private func decide(_ config: AnchorConfig, _ percent: Int, _ phase: ChargePhase
     #expect(d.phase == .discharging) // resumes when the lid opens
 }
 
-@Test func sleepPausesChargingWithinWindow() {
-    let d = decide(anchor(), 77, .charging, asleep: true)
+@Test func sleepPausesChargingJustBelowMax() {
+    let d = decide(anchor(), 79, .charging, asleep: true)
     #expect(!d.allowCharging && !d.forceDischarge)
-    #expect(d.phase == .charging) // resumes charging after wake
+    #expect(d.phase == .charging) // finishes after wake
+}
+
+@Test func sleepKeepsChargingUntilCloseToMax() {
+    #expect(decide(anchor(), 77, .charging, asleep: true).allowCharging)
+    #expect(!decide(anchor(), 78, .charging, asleep: true).allowCharging)
+}
+
+@Test func wideBufferDoesNotEndOvernightChargeEarly() {
+    // Reported case: max 70 with a 10-point buffer paused overnight at 61%, nine points short.
+    #expect(decide(anchor(max: 70, buffer: 10), 61, .charging, asleep: true).allowCharging)
+    #expect(!decide(anchor(max: 70, buffer: 10), 68, .charging, asleep: true).allowCharging)
 }
 
 @Test func sleepStillChargesBelowWindow() {
@@ -107,7 +118,7 @@ private func decide(_ config: AnchorConfig, _ percent: Int, _ phase: ChargePhase
 }
 
 @Test func sleepPauseCanBeDisabled() {
-    #expect(decide(anchor(sleepPause: false), 77, .charging, asleep: true).allowCharging)
+    #expect(decide(anchor(sleepPause: false), 79, .charging, asleep: true).allowCharging)
 }
 
 @Test func sleepNeverDischarges() {

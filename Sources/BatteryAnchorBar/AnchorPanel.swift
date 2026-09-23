@@ -181,7 +181,7 @@ struct AnchorPanel: View {
         case .buffer:
             return "Recharge once this far below max (default \(AnchorConfig.defaultRechargeBuffer)%)"
         case .sleep:
-            return "Stops sleep from charging past the max"
+            return "Asleep, it stops just below max and finishes on wake"
         case .login:
             return "Open Battery Anchor when you log in"
         }
